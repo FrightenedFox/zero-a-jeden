@@ -8,13 +8,13 @@ worst_situaion = '101'
 class Graph:
 	''' Creates a graph of the times used to process all 
 	substrings using tkinter and other built-in python methods'''
-	def __init__(self):
+	def __init__(self, width=1200, height=400, density=25):
 		self.time_records = []
 		master = tk.Tk()
 	
-		self.width, self.height = 1200, 500
+		self.width, self.height = width, height
 		self.legend_x, self.legend_y, self.title, self.post_graph_area = 100, 50, 50, 20
-		self.density = 25
+		self.density = density
 	
 		self.graph_width = self.width - self.legend_x - self.post_graph_area
 		self.graph_height = self.height - self.legend_y - self.title
@@ -49,7 +49,7 @@ class Graph:
 				all_sum.append(sum(data_set))
 
 		self.distance = self.graph_width/max(all_len)
-		self.multiplicator = self.graph_height/max(all_sum)
+		self.multiplicator = self.graph_height/max(all_max)
 
 		quantity_labels = floor(self.graph_height/self.density)
 		Min, Max =min(all_min), max(all_max)
@@ -74,12 +74,15 @@ class Graph:
 
 	def graph_painter(self, data, colour="black"):
 		x1, y1= self.legend_x, self.graph_height+self.title
+		previous = 0
 		for record in data:
-			record =self.multiplicator*record
+			shift = record - previous
+			previous = record
+			shift =self.multiplicator*shift
 			x2 = x1+self.distance
-			self.canv.create_line( x1, y1, x2, y1-record, fill = colour )
+			self.canv.create_line( x1, y1, x2, y1-shift, fill = colour )
 			x1 = x2
-			y1 -= record
+			y1 -= shift
 
 
 
@@ -102,3 +105,32 @@ def worst_sequence(path = "input_worst.txt", lines = 10, start_repeats = 30, inc
 			file.write(line+'\n')
 			start_repeats+= increment
 			start_repeats*= multiplier
+
+import time, sys
+
+
+# The next funcrion is not written by Vitalii Morskyi (just modified)
+# Source: https://stackoverflow.com/questions/3160699/python-progress-bar
+def update_progress(progress, path_in):
+	''' Displays or updates a console progress bar. WORKS ONLY WITH CONSOLE
+	Accepts a float between 0 and 1. Any int will be converted to a float.
+	A value under 0 represents a 'halt'.
+	A value at 1 or bigger represents 100%.'''
+
+	barLength = 10 # Modify this to change the length of the progress bar
+	status = ""
+	if isinstance(progress, int):
+		progress = float(progress)
+	if not isinstance(progress, float):
+		progress = 0
+		status = "error: progress var must be float\r\n"
+	if progress < 0:
+		progress = 0
+		status = "Halt...\r\n"
+	if progress >= 1:
+		progress = 1
+		status = "Gotowy...\r\n"
+	block = int(round(barLength*progress))
+	text = "\rPrzetwarzanie pliku \"{3}\" : [{0}] {1}% {2}".format( "#"*block + "-"*(barLength-block), round(progress*100,1), status, path_in)
+	sys.stdout.write(text)
+	sys.stdout.flush()

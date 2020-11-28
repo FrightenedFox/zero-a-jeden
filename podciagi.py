@@ -26,6 +26,7 @@ class binary_sequences:
 		self.reading_file()
 		self.enable_repeating_lists_before_output = False
 		self.optimization_level = 3
+		self.show_progress_bar = False
 
 
 
@@ -38,8 +39,14 @@ class binary_sequences:
 		self.number_of_sequences = len(self.all_sequences)	# Number of sequences given in the input file
 		self.time_results = [] 						# List of records of the time used by algorithm function
 
+		print('\n\n')
+
 		while self.iterator < self.number_of_sequences:
 			current_sequence = self.all_sequences[self.iterator]
+
+			if self.show_progress_bar:					# Updates progress bar if appropriate flag is enabled
+				assist.update_progress(self.iterator/self.number_of_sequences, self.path_in)
+
 			self.iterator += 1
 
 			k = current_sequence.count(1)			# n, k - the quantity of digits "zero" & "one" respectively
@@ -72,6 +79,10 @@ class binary_sequences:
 		else:										# Writing of the conclusion with respect to conjugation of polish numerals
 
 			if self.input_file_exist and not self.reading_file_error:
+
+				if self.show_progress_bar:
+					assist.update_progress(self.iterator/self.number_of_sequences, self.path_in)
+
 				last_digit=list(str(self.number_of_sequences)).pop()
 	
 				teened = False
@@ -89,7 +100,7 @@ class binary_sequences:
 				time_used = round(sum(self.time_results),3)
 				avarage_time_used = round(time_used/self.number_of_sequences, 5)
 
-				print("|\nRozpoznano {0} {1} w pliku \"{2}\". ".format(self.number_of_sequences, insert_text, self.path_in)+
+				print("Rozpoznano {0} {1} w pliku \"{2}\". ".format(self.number_of_sequences, insert_text, self.path_in)+
 					"Wszystkie odpowiedzi zostały zapisane w pliku \"{}\". ".format(self.path_out) +
 					"\nWybrany {} poziom optymalizacji.".format(self.optimization_level)+
 					"\nCzas roboty algorytmu wynosi {} s.".format(time_used) + 
@@ -269,7 +280,7 @@ class binary_sequences:
 
 def test(optimization_level = 3, path_in = '', path_out = '', return_time = True, worst_scenario = False,
 	lines = 10, start_repeats = 30, start_length = 50, increment = 0, multiplier = 1, send_to_class = False,
-	receiver_object = ''):
+	receiver_object = '', generate_new_data = True, show_progress_bar = False):
 	''' Creates the test with the random or worst possible input data. 
 	Be careful with the input and output files you are giving: they will be 
 	replaced with the new automatically generated files. '''
@@ -282,9 +293,9 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 		path_out = ".\\tests\\output_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
 
 	try:
-		if worst_scenario:																	# Generation an input file
+		if worst_scenario and generate_new_data:											# Generation an input file
 			assist.worst_sequence(path_in, lines, start_repeats, increment, multiplier)
-		else:
+		elif generate_new_data:
 			assist.random_sequence(path_in, lines, start_length, increment, multiplier)
 	except FileNotFoundError as error:
 		print("Wystąpił błąd: ", error)
@@ -293,6 +304,7 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 	else:
 		test_object = binary_sequences(path_in, path_out)									# Solving the problem if file is created
 		test_object.optimization_level = optimization_level
+		test_object.show_progress_bar = show_progress_bar
 		test_object.solve_problem()
 		if return_time:
 			give_time(test_object)
@@ -302,14 +314,18 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 
 
 
-def algorithm_comparison():
-	graph_object = assist.Graph()
-	test(optimization_level = 2, send_to_class=True, receiver_object=graph_object, return_time = True, 
-		worst_scenario = True, lines = 50, start_repeats = 10,start_length = 50,increment = 10,multiplier = 1)
-	test(optimization_level = 3, send_to_class=True, receiver_object=graph_object, return_time = True, 
-		worst_scenario = True, lines = 50, start_repeats = 10,start_length = 50,increment = 10,multiplier = 1)
-	test(optimization_level = 1, send_to_class=True, receiver_object=graph_object, return_time = True, 
-		worst_scenario = True, lines = 20, start_repeats = 10,start_length = 50,increment = 10,multiplier = 1)
+def algorithm_comparison(path_in, path_out, worst_scenario = False, generate_new_data = True):
+	if worst_scenario:
+		assist.worst_sequence(path_in, lines = 10, start_repeats = 10, increment = 10, multiplier = 1)
+	else:
+		assist.random_sequence(path_in,  lines = 25, start_length = 1000, increment = 0, multiplier = 1)
+	graph_object = assist.Graph(1200, 1000)
+	test(path_in=path_in, path_out=path_out,
+		optimization_level = 1, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
+	test(path_in=path_in, path_out=path_out,
+		optimization_level = 2, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
+	test(path_in=path_in, path_out=path_out,
+		optimization_level = 3, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
 	graph_object.paint_graph()
 
 
@@ -343,6 +359,7 @@ def main():
 	# Default values of the flags:
 	example_object.enable_repeating_lists_before_output = False		# Enable to add the repetition of the input data in the output file	
 	example_object.optimization_level = 3							# Level of algorithm optimisation. Accepted values: 1, 2, 3 (bigger is better).
+	example_object.show_progress_bar = False						# Enable to see progress bar. WORKS ONLY WITH CONSOLE, in python Shelf it looks ugly.
 
 
 	example_object.enable_repeating_lists_before_output = True 		# When you are going to read the results it looks prettier, but while working 
@@ -359,23 +376,26 @@ def main():
 	give_time(example_object)										# Do the same and also adds some pretty text
 
 	# If you finished working with some object 
-	# it is better to delete it then not, beause
+	# it is better to delete it then not, because
 	# in that case it won't eat any RAM
 	del example_object
 
 	test(															# You can also create tests using test() function, where:
-		optimization_level = 3, 									# - level of algorithm optimisation, accepted values: 1, 2, 3;
+		optimization_level = 1, 									# - level of algorithm optimisation, accepted values: 1, 2, 3;
 		path_in = '.\\tests\\input_worst_scenario.txt', 			# - path, where new input file will be generated;
 		path_out = '.\\tests\\output_worst_scenario.txt', 			# - path, where new output file will be created;
 		return_time = True, 										# - flag, which asks if you would like to see used time results in console;
-		worst_scenario = True, 										# - flag, which asks if the input file have to be filled with random strings or worst strings; 
+		worst_scenario = True,										# - flag, which asks if the input file have to be filled with random strings or worst strings; 
 		lines = 40, 												# - number of strings (lines) in generated file;
 		start_repeats = 10, 										# - number of repeats of the sequence '101' in the first line, if worst scenario is chosen;
 		start_length = 50, 											# - length of the first string (line), if random scenario is chosen;
-		increment = 10, 											# - increment of (repeats / length) of the (sequence '101' / line) after each line;
-		multiplier = 1)												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
+		increment = 5,												# - increment of (repeats / length) of the (sequence '101' / line) after each line;
+		multiplier = 1,												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line;
+		generate_new_data = True,									# - flag, which asks if you would like to create new input file or use an existing one.
+		show_progress_bar = True
+		)
 
-	algorithm_comparison()
+	algorithm_comparison('.\\tests\\inp_comparison.txt','.\\tests\\out_comparison.txt', worst_scenario=False)
 
 	# import os
 	# os.system("pause")
