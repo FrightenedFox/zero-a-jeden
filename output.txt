@@ -1,0 +1,26 @@
+Rozwiązanie dla ciągu №1 (1, 0, 1, 0, 1, 0, 1, 0)
+Najdłuższym podciągiem jest: 1, 0, 1, 0, 1, 0, 1, 0
+
+Rozwiązanie dla ciągu №2 (1, 1, 1, 1, 1, 1, 1, 1)
+Dla takich danych wejściowych: 1, 1, 1, 1, 1, 1, 1, 1
+podciąg zawierający równą liczbę zer i jedynek nie istnieje.
+
+Rozwiązanie dla ciągu №3 (0, 0, 0, 0, 0, 0, 0, 0)
+Dla takich danych wejściowych: 0, 0, 0, 0, 0, 0, 0, 0
+podciąg zawierający równą liczbę zer i jedynek nie istnieje.
+
+Rozwiązanie dla ciągu №4 (1, 0, 0)
+Najdłuższym podciągiem jest: 1, 0
+
+Rozwiązanie dla ciągu №5 (1, 0, 1, 0, 1)
+Najdłuższymi podciągami są 1, 0, 1, 0 oraz 0, 1, 0, 1
+
+Rozwiązanie dla ciągu №6 (1, 0, 1, 1, 1, 1, 1, 1, 0, 1)
+Najdłuższymi podciągami są 1, 0 oraz 0, 1
+
+Rozwiązanie dla ciągu №7 (0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0)
+Najdłuższymi podciągami są:
+(0, 1, 0, 1), (1, 0, 1, 0), (0, 0, 1, 1), (0, 1, 1, 0)
+
+Rozwiązanie dla ciągu №8 (0, 1, 0, 1, 0)
+Najdłuższymi podciągami są 0, 1, 0, 1 oraz 1, 0, 1, 0

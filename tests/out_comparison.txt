@@ -1,0 +1,44 @@
+Rozwiązanie dla ciągu №1
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №2
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №3
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №4
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №5
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №6
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №7
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №8
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №9
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №10
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №11
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №12
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №13
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №14
+Najdłuższym podciągiem jest: 0, 1, 1, 0
+
+Rozwiązanie dla ciągu №15
+Najdłuższym podciągiem jest: 0, 1, 1, 0
