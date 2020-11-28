@@ -1,8 +1,9 @@
 from time import *
+from math import floor
 
 try:
 	import assistant_module	as assist	# Another part of my program where some cool functions are placed.
-										# File assistant_module.py should be located in the same folder with this file (podciagi.py)
+										# File assistant_module.py should be located in the same folder with following file: (podciagi.py)
 except ModuleNotFoundError:
 	print("Wystąpił błąd!\nUmieść pliki „assistant_module.py” i „podciagi.py” w tym samym folderze.")
 	import sys, os
@@ -20,6 +21,7 @@ class binary_sequences:
 	
 	def __init__(self, path_in = 'input.txt', path_out = 'output.txt'):
 		''' Initialization of the class and assigning default values to flags'''
+
 		self.path_in = path_in
 		self.path_out = path_out
 		self.reading_file()
@@ -30,7 +32,7 @@ class binary_sequences:
 
 
 	def draw_separator(self):
-		''' This function draws a pretty separator between tasks'''
+		''' This function draws a "pretty" separator between tasks'''
 
 		heading = " Nowe zadanie z pliku: \"{}\" ".format(self.path_in)
 		separator = '-'*5 + heading + '-'*(115 - len(heading))
@@ -47,12 +49,12 @@ class binary_sequences:
 		self.number_of_sequences = len(self.all_sequences)	# Number of sequences given in the input file
 		self.time_results = [] 						# List of records of the time used by algorithm function
 
-		self.draw_separator()
+		self.draw_separator()						# Drawing a "pretty" separator between tasks
 
 		while self.iterator < self.number_of_sequences:
 			current_sequence = self.all_sequences[self.iterator]
 
-			if self.show_progress_bar:					# Updates progress bar if appropriate flag is enabled
+			if self.show_progress_bar:				# Updates the progress bar if the appropriate flag is enabled
 				assist.update_progress(self.iterator/self.number_of_sequences, self.path_in)
 
 			self.iterator += 1
@@ -119,7 +121,7 @@ class binary_sequences:
 				print("\nNie znaleziono pliku według ścieżki \"{}\".\n".format(self.path_in))
 
 			elif self.input_file_exist and self.reading_file_error:
-				print("\n\nCoś poszło nie tak.\n")
+				print("\n\nCoś poszło nie tak podczas odczytu pliku.\n")
 
 			elif self.number_of_sequences==0:
 				print("Nie rozpoznano wejściowych ciągów w pliku \"{}\". ".format(self.path_in))
@@ -160,11 +162,13 @@ class binary_sequences:
 		of digits "zero" & "one". More detailed explanation can be found in my report. '''
 
 		global current_sequence
-		substring =[]
+		substring =[]															# Defining the output array of found substrings
 		found = False
+		length_current_sequence = len(current_sequence)
+
 		for substr_len in range(max_substr_length, 0, -1):
 			starting_point, end_point = 0, substr_len*2
-			while end_point<=len(current_sequence):
+			while end_point<=length_current_sequence:
 				one = current_sequence[starting_point:end_point].count(1)
 				if one == substr_len:
 					found = True
@@ -187,11 +191,13 @@ class binary_sequences:
 		of digits "zero" & "one". More detailed explanation can be found in my report. '''
 
 		global current_sequence
-		substring =[]
+		substring =[]															# Defining the output array of found substrings
 		found = False
+		length_current_sequence = len(current_sequence)
+
 		for substr_len in range(max_substr_length, 0, -1):
 			starting_point, end_point = 0, substr_len*2
-			while end_point<=len(current_sequence):
+			while end_point<=length_current_sequence:
 				one = 0
 				for element in current_sequence[starting_point:end_point]:		# Counts all digits "one" in the substring
 					one += element												# Actually it's equal to the method "array.count(1)"
@@ -216,33 +222,34 @@ class binary_sequences:
 		''' Takes a sequence and returns the subsequence so that it would have equal number 
 		of digits "zero" & "one". More detailed explanation can be found in my report. '''
 		
-		import math
 		global current_sequence
-		substring =[]
-		length = math.floor(len(current_sequence)/2)
+		substring =[]															# Defining the output array of found substrings
 		found = False
-		for substr_len in range(length, 0, -1):
-			starting_point, end_point = 0, substr_len*2
-			while end_point<=len(current_sequence):
+		length_current_sequence = len(current_sequence)
+		length = floor(length_current_sequence/2)								# Finding the starting number of searched pairs (0,1)
+
+		for substr_len in range(length, 0, -1):									
+			starting_point, end_point = 0, substr_len*2 						# Defining the size of the first subsequence (as a partition of an array)
+			while end_point<=length_current_sequence:							# While we are within sequence edges - do the following 
 				one = 0
 				for element in current_sequence[starting_point:end_point]:		# Counts all digits "one" in the substring
-					one += element												# Actually it's equal to the method "array.count(1)"
+					one += element												# It's equal to the function "array.count(1)"
 				if one == substr_len:
 					found = True
 					already_exist = self.check_if_exists(current_sequence[starting_point:end_point], substring)
-					if not already_exist:
+					if not already_exist: 										# Adding the found sequence to the array, if it isn't there already
 						substring.append(current_sequence[starting_point:end_point])
-				starting_point+=1
+				starting_point+=1												# Moving forward along the sequence
 				end_point+=1
-			if found:
+			if found:															# If the subsequence is found - stop searching
 				break
-		return substring
+		return substring 														# And return the result
 
 
 
 	def check_if_exists(self, prey, sequence):
-		''' Checks if the given prey exists in the array "sequence". In other words it is 
-		an equiwalent to the native Python method "<object> in <object>".'''
+		''' Checks if the given prey exists in the array "sequence". In other words, it is 
+		the equivalent to the native Python method "<object> in <object>".'''
 
 		for element in sequence: 
 			if element == prey:
@@ -253,7 +260,8 @@ class binary_sequences:
 
 
 	def sequence_to_string(self, sequence):
-		''' Creates a beautiful string from the sequence with comas after each element except of the last one'''
+		''' Creates a beautiful string from the sequence with comas after each element except for the last one'''
+
 		string = ''
 		last_without_period = str(sequence.pop())
 		for element in sequence:
@@ -294,11 +302,11 @@ class binary_sequences:
 def test(optimization_level = 3, path_in = '', path_out = '', return_time = True, worst_scenario = False,
 	lines = 10, start_repeats = 30, start_length = 50, increment = 0, multiplier = 1, send_to_class = False,
 	receiver_object = '', generate_new_data = True, show_progress_bar = False):
-	''' Creates the test with the random or worst possible input data. 
-	Be careful with the input and output files you are giving: they will be 
-	replaced with the new automatically generated files. '''
+	''' Creates the test with random or the worst possible input data. 
+	Be careful with the input and output files you are providing: they will be 
+	replaced with the new automatically generated files, if generate_new_data flag is set to True'''
 
-	from random import randrange as rand 													# Generation the file names
+	from random import randrange as rand 													# Generation of the file names
 	rand_koef = rand(1000)
 	if path_in == '':
 		path_in = ".\\tests\\input_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
@@ -306,7 +314,7 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 		path_out = ".\\tests\\output_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
 
 	try:
-		if worst_scenario and generate_new_data:											# Generation an input file
+		if worst_scenario and generate_new_data:											# Generation of an input file
 			assist.worst_sequence(path_in, lines, start_repeats, increment, multiplier)
 		elif generate_new_data:
 			assist.random_sequence(path_in, lines, start_length, increment, multiplier)
@@ -315,7 +323,7 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 	except:
 		print("Przepraszamy, coś poszło nie tak ...")
 	else:
-		test_object = binary_sequences(path_in, path_out)									# Solving the problem if file is created
+		test_object = binary_sequences(path_in, path_out)									# Solving the problem if a file is created
 		test_object.optimization_level = optimization_level
 		test_object.show_progress_bar = show_progress_bar
 		test_object.solve_problem()
@@ -323,25 +331,31 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 			give_time(test_object)
 			if send_to_class:
 				receiver_object.save_new_data(test_object.time_results, optimization_level)
-		del test_object
+		del test_object	
 
 
 
-def algorithm_comparison(path_in, path_out, worst_scenario = False, generate_new_data = True, show_progress_bar = False,
-	lines = 10, start_repeats = 10, start_length = 100, increment = 10, multiplier = 1):
+def algorithm_comparison(path_in='', path_out='', worst_scenario = False, generate_new_data = True, show_progress_bar = False,
+	lines = 10, start_repeats = 10, start_length = 100, increment = 0, multiplier = 1, width=1200, height=800, show_stats = False):
+	''' Creates the algorithm comparison with random or the worst possible input data. 
+	Be careful with the input and output files you are providing: they will be 
+	replaced with the new automatically generated files, if generate_new_data flag is set to True'''
+
 	if worst_scenario and generate_new_data:
 		assist.worst_sequence(path_in, lines = lines, start_repeats = start_repeats, increment = increment, multiplier = multiplier)
 	elif generate_new_data:
 		assist.random_sequence(path_in,  lines = lines, start_length = start_length, increment = increment, multiplier = multiplier)
-
-	graph_object = assist.Graph(1200, 1000)
+																							# Defining the object of the class  assist.Graph
+	graph_object = assist.Graph(worst_scenario=worst_scenario, increment=increment, 
+		multiplier=multiplier, width=width, height=height, show_stats = show_stats)	
+																							# Creating some tests with different optimization level
 	test(path_in=path_in, path_out=path_out, show_progress_bar = show_progress_bar,
 		optimization_level = 1, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
 	test(path_in=path_in, path_out=path_out, show_progress_bar = show_progress_bar,
 		optimization_level = 2, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
 	test(path_in=path_in, path_out=path_out, show_progress_bar = show_progress_bar,
 		optimization_level = 3, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
-	graph_object.paint_graph()
+	graph_object.paint_graph()																# Drawing the graph
 	del graph_object
 
 
@@ -375,25 +389,25 @@ def main():
 	# Default values of the flags:
 	example_object.enable_repeating_lists_before_output = False		# Enable to add the repetition of the input data in the output file	
 	example_object.optimization_level = 3							# Level of algorithm optimisation. Accepted values: 1, 2, 3 (bigger is better).
-	example_object.show_progress_bar = False						# Enable to see progress bar. WORKS WELL ONLY IN CONSOLE. In python Shelf it looks ugly.
+	example_object.show_progress_bar = False						# Enable to see the progress bar. WORKS WELL ONLY IN CONSOLE. In python Shelf it looks ugly.
 
 
 	example_object.enable_repeating_lists_before_output = True 		# When you are going to read the results it looks prettier, but while working 
-																	# with large amounts of data it is likely to mess up the look of the output file
-																	# As I would appreciate you to read the file 'output.txt', I am going to enable this flag
+																	# with large amounts of data it is likely to mess up the look of the output file.
+																	# Since I would appreciate you to read the file 'output.txt', I am going to enable this flag
 
-	# Launching of the main function of the class 'binary_sequences'
+	# Launching the main function of the class 'binary_sequences'
 	example_object.solve_problem()	
 
 
 	# If you need to know how much time was needed to process each 
 	# sequence you can use one of the next methods:
 	print(example_object.time_results)								# Only prints the array of time records
-	give_time(example_object)										# Do the same and also adds some pretty text
+	give_time(example_object)										# Does the same and also adds some pretty text
 
 	# If you finished working with some object 
-	# it is better to delete it then not, because
-	# in that case it won't eat any RAM
+	# it is better to delete it than not, because
+	# in that case it won't use any RAM
 	del example_object
 
 
@@ -402,15 +416,15 @@ def main():
 		path_in = '.\\tests\\input_worst_scenario.txt', 			# - path, where new input file will be generated or existing file opened;
 		path_out = '.\\tests\\output_worst_scenario.txt', 			# - path, where new output file will be created;
 		return_time = True, 										# - flag, which asks if you would like to see used time results in console;
-		generate_new_data = True,									# - flag, which asks if you would like to create new input file or use an existing one;
-		show_progress_bar = True, 									# - flag, which asks if you would like to see progress bar (WORKS WELL ONLY IN CONSOLE);
+		generate_new_data = True,									# - flag, which asks if you would like to create a new input file or use an existing one;
+		show_progress_bar = True, 									# - flag, which asks if you would like to see the progress bar (WORKS WELL ONLY IN CONSOLE);
 
-		# Next options make changes only if generate_new_data set to True:
-		worst_scenario = True,										# - flag, which asks if the input file have to be filled with
-																	#   worst (True) strings or random (False) strings; 
-		lines = 20, 												# - number of strings (lines) in generated file;
-		start_repeats = 10, 										# - number of repeats of the sequence '101' in the first line, if worst scenario is chosen;
-		start_length = 500, 											# - length of the first string (line), if random scenario is chosen;
+		# Next options make changes only if generate_new_data flag is set to True:
+		worst_scenario = True,										# - flag, which asks if the input file has to be filled with
+																	#   the worst possible (True) strings or random (False) strings; 
+		lines = 20, 												# - number of strings (lines) in a generated file;
+		start_repeats = 10, 										# - number of repeats of the sequence '101' in the first line, if the worst scenario is chosen;
+		start_length = 500, 										# - length of the first string (line), if random scenario is chosen;
 		increment = 5,												# - increment of (repeats / length) of the (sequence '101' / line) after each line;
 		multiplier = 1												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
 		)
@@ -419,24 +433,74 @@ def main():
 	algorithm_comparison(											# You can also create algorithm comparison using algorithm_comparison() function, where:
 		path_in = '.\\tests\\inp_comparison.txt', 					# - path, where new input file will be generated;
 		path_out = '.\\tests\\out_comparison.txt', 					# - path, where new output file will be created;
-		generate_new_data = True,									# - flag, which asks if you would like to create new input file or use an existing one;
-		show_progress_bar = True, 									# - flag, which asks if you would like to see progress bar (WORKS WELL ONLY IN CONSOLE);
+		generate_new_data = True,									# - flag, which asks if you would like to create a new input file or use an existing one;
+		show_progress_bar = True, 									# - flag, which asks if you would like to see the progress bar (WORKS WELL ONLY IN CONSOLE);
+		height = 800,												# - height of the created graph (minimum 200, recommended 800);
+		width = 1200,												# - width of the created graph (minimum 650, recommended 1200);
+		show_stats = True,											# - shows the information about the increment and multiplier on the plot;
 
-		# Next options make changes only if generate_new_data set to True:
-		worst_scenario = True,										# - flag, which asks if the input file have to be filled with 
-																	#   worst (True) strings or random (False) strings; 
-		lines = 15, 												# - number of strings (lines) in generated file;
-		start_repeats = 50, 										# - number of repeats of the sequence '101' in the first line, if worst scenario is chosen;
+		# Next options make changes only if generate_new_data flag is set to True:
+		worst_scenario = True,										# - flag, which asks if the input file has to be filled with 
+																	#   the worst possible (True) strings or random (False) strings; 
+		lines = 15, 												# - number of strings (lines) in a generated file;
+		start_repeats = 50, 										# - number of repeats of the sequence '101' in the first line, if the worst scenario is chosen;
 		start_length = 500,		 									# - length of the first string (line), if random scenario is chosen;
 		increment = 5,												# - increment of (repeats / length) of the (sequence '101' / line) after each line;
 		multiplier = 1												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
 		)
 
+	porownanie_algorytmow()
 	
 	# If you need the console not to close immediately after
-	# finishing your task then please uncomment the two following rows. 
+	# finishing your task, then please uncomment the following two rows. 
 	# import os 							
 	# os.system("pause")
+
+
+
+def porownanie_algorytmow():
+	''' Here I would like to show instructions I used in
+	the paragraph "Porównanie algorytmów" of my report'''
+
+	# Generating 20 random sequences of digits zero and one and writing them down to the file "report_rand_input.txt"
+	# The following function is commented, because we already created this file before, 
+	# so we don't need to create it one more time. Moreover, since the input data is the same, 
+	# you can test this yourself and get similar results to one, shown in the report.
+	# assist.random_sequence(path = "report_rand_input.txt", lines = 20, start_length = 1000, increment = 0, multiplier = 1)
+
+	"""
+
+	# Creating an object of class binary_sequences
+	test_1 = binary_sequences('report_rand_input.txt', 'report_rand_output.txt')
+
+	# Needed values have to be assigned to flags
+	test_1.optimization_level = 1
+	test_1.show_progress_bar = True
+
+	# Now we can start our test
+	test_1.solve_problem()
+
+	# Since we are going to compare our algorithms, we need the time results information
+	give_time(test_1)
+
+	# Second algorithm test
+	test_1.optimization_level = 2
+	test_1.solve_problem()
+	give_time(test_1)
+
+	# Third algorithm test
+	test(optimization_level = 3, path_in = 'report_rand_input.txt', path_out = 'report_rand_output.txt', 
+		return_time = True, generate_new_data = False, show_progress_bar = True)
+	
+	"""
+
+	# Creating a comparison of three algorithms using graph
+	# Maybe we would like to comment all upper rows, since this function creates tests itself.
+	algorithm_comparison("report_rand_input.txt", "report_rand_output.txt",generate_new_data = False, 
+		show_progress_bar = True, width=1200, height=800, show_stats = False)
+
+
+
 
 if __name__ == "__main__":
     main()
