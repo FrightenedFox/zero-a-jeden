@@ -1,4 +1,6 @@
 #zero-a-jeden
+Made by Vitalii Morskyi.
+
 This project is a part of the curriculum in "Algorytmy i Struktury danych" 
 of the Polytechnic University of Rzeszów, Poland.
 
