@@ -9,7 +9,7 @@ except ModuleNotFoundError:
 	os.system("pause")
 	sys.exit()
 except:
-	print("Przepraszamy, coś poszło nie tak ... \nSprawdź, czy pliki „assistant_module.py” i „podciagi.py” znajdują się w tym samym folderze.")
+	print("Przepraszamy, coś poszło nie tak ... \nSprawdź, czy plik „assistant_module.py” nie posiada błedów.")
 	import sys, os
 	os.system("pause")
 	sys.exit()
@@ -18,16 +18,24 @@ except:
 
 class binary_sequences:
 	
-	def __init__(self, path_in = 'input.txt', path_out = 'output.txt', path_stats = 'statistics.txt'):
+	def __init__(self, path_in = 'input.txt', path_out = 'output.txt'):
 		''' Initialization of the class and assigning default values to flags'''
 		self.path_in = path_in
 		self.path_out = path_out
-		self.path_stats = path_stats
 		self.reading_file()
 		self.enable_repeating_lists_before_output = False
 		self.optimization_level = 3
 		self.show_progress_bar = False
 
+
+
+	def draw_separator(self):
+		''' This function draws a pretty separator between tasks'''
+
+		heading = " Nowe zadanie z pliku: \"{}\" ".format(self.path_in)
+		separator = '-'*5 + heading + '-'*(115 - len(heading))
+		print('\n\n\n\n' + separator + '\n')
+		
 
 
 	def solve_problem(self):
@@ -39,7 +47,7 @@ class binary_sequences:
 		self.number_of_sequences = len(self.all_sequences)	# Number of sequences given in the input file
 		self.time_results = [] 						# List of records of the time used by algorithm function
 
-		print('\n\n')
+		self.draw_separator()
 
 		while self.iterator < self.number_of_sequences:
 			current_sequence = self.all_sequences[self.iterator]
@@ -68,7 +76,7 @@ class binary_sequences:
 				elif self.optimization_level == 1:
 					substring = self.main_algorithm_brute()
 				else:
-					print("|\nNieprawidłowo określony poziom optymalizacji. Wybrano ustawienia domyślne.")
+					print("\nNieprawidłowo określony poziom optymalizacji. Wybrano ustawienia domyślne.")
 					self.optimization_level = 3
 					substring = self.main_algorithm_optimized(p)
 				end_time = time()					# Recording the time of the main algorithm end
@@ -78,10 +86,11 @@ class binary_sequences:
 
 		else:										# Writing of the conclusion with respect to conjugation of polish numerals
 
-			if self.input_file_exist and not self.reading_file_error:
+			if self.input_file_exist and not self.reading_file_error and self.number_of_sequences>0:
 
 				if self.show_progress_bar:
 					assist.update_progress(self.iterator/self.number_of_sequences, self.path_in)
+					print('')
 
 				last_digit=list(str(self.number_of_sequences)).pop()
 	
@@ -104,12 +113,16 @@ class binary_sequences:
 					"Wszystkie odpowiedzi zostały zapisane w pliku \"{}\". ".format(self.path_out) +
 					"\nWybrany {} poziom optymalizacji.".format(self.optimization_level)+
 					"\nCzas roboty algorytmu wynosi {} s.".format(time_used) + 
-					"\nŚredni czas przetwarzania jednego ciągu wynosi {} s.\n|".format(avarage_time_used))
+					"\nŚredni czas przetwarzania jednego ciągu wynosi {} s.\n".format(avarage_time_used))
 
 			elif not self.input_file_exist and self.reading_file_error:
-				print("|\nNie znaleziono pliku według ścieżki \"{}\".\n| ".format(self.path_in))
+				print("\nNie znaleziono pliku według ścieżki \"{}\".\n".format(self.path_in))
+
 			elif self.input_file_exist and self.reading_file_error:
-				print("|\n|\nCoś poszło nie tak.\n|")
+				print("\n\nCoś poszło nie tak.\n")
+
+			elif self.number_of_sequences==0:
+				print("Nie rozpoznano wejściowych ciągów w pliku \"{}\". ".format(self.path_in))
 
 
 
@@ -309,24 +322,27 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 		if return_time:
 			give_time(test_object)
 			if send_to_class:
-				receiver_object.save_new_data(test_object.time_results)
+				receiver_object.save_new_data(test_object.time_results, optimization_level)
 		del test_object
 
 
 
-def algorithm_comparison(path_in, path_out, worst_scenario = False, generate_new_data = True):
-	if worst_scenario:
-		assist.worst_sequence(path_in, lines = 10, start_repeats = 10, increment = 10, multiplier = 1)
-	else:
-		assist.random_sequence(path_in,  lines = 25, start_length = 1000, increment = 0, multiplier = 1)
+def algorithm_comparison(path_in, path_out, worst_scenario = False, generate_new_data = True, show_progress_bar = False,
+	lines = 10, start_repeats = 10, start_length = 100, increment = 10, multiplier = 1):
+	if worst_scenario and generate_new_data:
+		assist.worst_sequence(path_in, lines = lines, start_repeats = start_repeats, increment = increment, multiplier = multiplier)
+	elif generate_new_data:
+		assist.random_sequence(path_in,  lines = lines, start_length = start_length, increment = increment, multiplier = multiplier)
+
 	graph_object = assist.Graph(1200, 1000)
-	test(path_in=path_in, path_out=path_out,
+	test(path_in=path_in, path_out=path_out, show_progress_bar = show_progress_bar,
 		optimization_level = 1, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
-	test(path_in=path_in, path_out=path_out,
+	test(path_in=path_in, path_out=path_out, show_progress_bar = show_progress_bar,
 		optimization_level = 2, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
-	test(path_in=path_in, path_out=path_out,
+	test(path_in=path_in, path_out=path_out, show_progress_bar = show_progress_bar,
 		optimization_level = 3, send_to_class=True, receiver_object=graph_object, return_time = True, generate_new_data = False)
 	graph_object.paint_graph()
+	del graph_object
 
 
 
@@ -359,7 +375,7 @@ def main():
 	# Default values of the flags:
 	example_object.enable_repeating_lists_before_output = False		# Enable to add the repetition of the input data in the output file	
 	example_object.optimization_level = 3							# Level of algorithm optimisation. Accepted values: 1, 2, 3 (bigger is better).
-	example_object.show_progress_bar = False						# Enable to see progress bar. WORKS ONLY WITH CONSOLE, in python Shelf it looks ugly.
+	example_object.show_progress_bar = False						# Enable to see progress bar. WORKS WELL ONLY IN CONSOLE. In python Shelf it looks ugly.
 
 
 	example_object.enable_repeating_lists_before_output = True 		# When you are going to read the results it looks prettier, but while working 
@@ -380,24 +396,46 @@ def main():
 	# in that case it won't eat any RAM
 	del example_object
 
+
 	test(															# You can also create tests using test() function, where:
 		optimization_level = 1, 									# - level of algorithm optimisation, accepted values: 1, 2, 3;
-		path_in = '.\\tests\\input_worst_scenario.txt', 			# - path, where new input file will be generated;
+		path_in = '.\\tests\\input_worst_scenario.txt', 			# - path, where new input file will be generated or existing file opened;
 		path_out = '.\\tests\\output_worst_scenario.txt', 			# - path, where new output file will be created;
 		return_time = True, 										# - flag, which asks if you would like to see used time results in console;
-		worst_scenario = True,										# - flag, which asks if the input file have to be filled with random strings or worst strings; 
-		lines = 40, 												# - number of strings (lines) in generated file;
+		generate_new_data = True,									# - flag, which asks if you would like to create new input file or use an existing one;
+		show_progress_bar = True, 									# - flag, which asks if you would like to see progress bar (WORKS WELL ONLY IN CONSOLE);
+
+		# Next options make changes only if generate_new_data set to True:
+		worst_scenario = True,										# - flag, which asks if the input file have to be filled with
+																	#   worst (True) strings or random (False) strings; 
+		lines = 20, 												# - number of strings (lines) in generated file;
 		start_repeats = 10, 										# - number of repeats of the sequence '101' in the first line, if worst scenario is chosen;
-		start_length = 50, 											# - length of the first string (line), if random scenario is chosen;
+		start_length = 500, 											# - length of the first string (line), if random scenario is chosen;
 		increment = 5,												# - increment of (repeats / length) of the (sequence '101' / line) after each line;
-		multiplier = 1,												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line;
-		generate_new_data = True,									# - flag, which asks if you would like to create new input file or use an existing one.
-		show_progress_bar = True
+		multiplier = 1												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
 		)
 
-	algorithm_comparison('.\\tests\\inp_comparison.txt','.\\tests\\out_comparison.txt', worst_scenario=False)
+	
+	algorithm_comparison(											# You can also create algorithm comparison using algorithm_comparison() function, where:
+		path_in = '.\\tests\\inp_comparison.txt', 					# - path, where new input file will be generated;
+		path_out = '.\\tests\\out_comparison.txt', 					# - path, where new output file will be created;
+		generate_new_data = True,									# - flag, which asks if you would like to create new input file or use an existing one;
+		show_progress_bar = True, 									# - flag, which asks if you would like to see progress bar (WORKS WELL ONLY IN CONSOLE);
 
-	# import os
+		# Next options make changes only if generate_new_data set to True:
+		worst_scenario = True,										# - flag, which asks if the input file have to be filled with 
+																	#   worst (True) strings or random (False) strings; 
+		lines = 15, 												# - number of strings (lines) in generated file;
+		start_repeats = 50, 										# - number of repeats of the sequence '101' in the first line, if worst scenario is chosen;
+		start_length = 500,		 									# - length of the first string (line), if random scenario is chosen;
+		increment = 5,												# - increment of (repeats / length) of the (sequence '101' / line) after each line;
+		multiplier = 1												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
+		)
+
+	
+	# If you need the console not to close immediately after
+	# finishing your task then please uncomment the two following rows. 
+	# import os 							
 	# os.system("pause")
 
 if __name__ == "__main__":
