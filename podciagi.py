@@ -299,6 +299,62 @@ class binary_sequences:
 
 
 
+def porownanie_algorytmow():
+	''' Here I would like to show instructions I used in
+	the paragraph "Porównanie algorytmów" of my report'''
+
+	# I HIGHLY RECOMMEND performing this function ONLY
+	# after reading the description in the article, 
+	# because in general it can take a long time to perform
+	"""
+
+	# Generating 20 random sequences of digits zero and one and writing them down to the file "report_rand_input.txt"
+	# The following function is commented, because we already created this file before, 
+	# so we don't need to create it one more time. Moreover, since the input data is the same, 
+	# you can test this yourself and get similar results to one, shown in the report.
+	# assist.random_sequence(path = ".\\tests\\report_rand_input.txt", lines = 20, start_length = 1000, increment = 0, multiplier = 1)
+
+	# Creating an object of class binary_sequences
+	test_1 = binary_sequences('.\\tests\\report_rand_input.txt', '.\\tests\\report_rand_output.txt')
+
+	# Needed values have to be assigned to flags
+	test_1.optimization_level = 1
+	test_1.show_progress_bar = True
+
+	# Now we can start our test
+	test_1.solve_problem()
+
+	# Since we are going to compare our algorithms, we need the time results information
+	give_time(test_1)
+
+	# Second algorithm test
+	test_1.optimization_level = 2
+	test_1.solve_problem()
+	give_time(test_1)
+	
+	# Third algorithm test
+	test(optimization_level = 3, path_in = '.\\tests\\report_rand_input.txt', path_out = '.\\tests\\report_rand_output.txt', 
+		return_time = True, generate_new_data = False, show_progress_bar = True)
+	
+	# Creating a comparison of three algorithms using graph
+	# Maybe we would like to comment all upper rows, since this function creates tests itself.
+	algorithm_comparison(".\\tests\\report_rand_input.txt", ".\\tests\\report_rand_output.txt",generate_new_data = False, 
+		show_progress_bar = True, width=1200, height=800, show_stats = False)
+	
+	assist.worst_sequence(path = ".\\tests\\report_worst_input.txt", lines = 20, start_repeats = 333, increment = 0, multiplier = 1)
+
+	algorithm_comparison(".\\tests\\report_worst_input.txt", ".\\tests\\report_worst_output.txt",generate_new_data = False, 
+		show_progress_bar = True, width=1200, height=800, show_stats = False)
+	
+	assist.worst_sequence(path = ".\\tests\\report_worst_increment_input.txt", lines = 20, start_repeats = 100, increment = 15, multiplier = 1)
+	
+	algorithm_comparison(".\\tests\\report_worst_increment_input.txt", ".\\tests\\report_worst_increment_output.txt",generate_new_data = False, 
+		show_progress_bar = True, width=1200, height=800, show_stats = False)
+	"""
+	pass
+
+
+
 def test(optimization_level = 3, path_in = '', path_out = '', return_time = True, worst_scenario = False,
 	lines = 10, start_repeats = 30, start_length = 50, increment = 0, multiplier = 1, send_to_class = False,
 	receiver_object = '', generate_new_data = True, show_progress_bar = False):
@@ -449,56 +505,16 @@ def main():
 		multiplier = 1												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
 		)
 
+
+	# I HIGHLY RECOMMEND performing this function ONLY
+	# after reading the description in the article, 
+	# because in general it can take a long time to perform
 	porownanie_algorytmow()
 	
 	# If you need the console not to close immediately after
 	# finishing your task, then please uncomment the following two rows. 
 	# import os 							
 	# os.system("pause")
-
-
-
-def porownanie_algorytmow():
-	''' Here I would like to show instructions I used in
-	the paragraph "Porównanie algorytmów" of my report'''
-
-	# Generating 20 random sequences of digits zero and one and writing them down to the file "report_rand_input.txt"
-	# The following function is commented, because we already created this file before, 
-	# so we don't need to create it one more time. Moreover, since the input data is the same, 
-	# you can test this yourself and get similar results to one, shown in the report.
-	# assist.random_sequence(path = "report_rand_input.txt", lines = 20, start_length = 1000, increment = 0, multiplier = 1)
-
-	"""
-
-	# Creating an object of class binary_sequences
-	test_1 = binary_sequences('report_rand_input.txt', 'report_rand_output.txt')
-
-	# Needed values have to be assigned to flags
-	test_1.optimization_level = 1
-	test_1.show_progress_bar = True
-
-	# Now we can start our test
-	test_1.solve_problem()
-
-	# Since we are going to compare our algorithms, we need the time results information
-	give_time(test_1)
-
-	# Second algorithm test
-	test_1.optimization_level = 2
-	test_1.solve_problem()
-	give_time(test_1)
-
-	# Third algorithm test
-	test(optimization_level = 3, path_in = 'report_rand_input.txt', path_out = 'report_rand_output.txt', 
-		return_time = True, generate_new_data = False, show_progress_bar = True)
-	
-	"""
-
-	# Creating a comparison of three algorithms using graph
-	# Maybe we would like to comment all upper rows, since this function creates tests itself.
-	algorithm_comparison("report_rand_input.txt", "report_rand_output.txt",generate_new_data = False, 
-		show_progress_bar = True, width=1200, height=800, show_stats = False)
-
 
 
 
