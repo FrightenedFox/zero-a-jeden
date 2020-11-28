@@ -34,19 +34,19 @@ class binary_sequences:
 		After completing the task it writes out small conclusion to the console. '''
 
 		global current_sequence
-		self.iterator = 0								# If more than one input was given, then this variable will help to iterate the whole process
+		self.iterator = 0							# If more than one input was given, then this variable will help to iterate the whole process
 		self.number_of_sequences = len(self.all_sequences)	# Number of sequences given in the input file
-		self.time_results = [] 							# List of records of the time used by algorithm function
+		self.time_results = [] 						# List of records of the time used by algorithm function
 
 		while self.iterator < self.number_of_sequences:
 			current_sequence = self.all_sequences[self.iterator]
 			self.iterator += 1
 
-			k = current_sequence.count(1)	 # n, k - the quantity of digits "zero" & "one" respectively
+			k = current_sequence.count(1)			# n, k - the quantity of digits "zero" & "one" respectively
 			n = len(current_sequence)-k
-			p = min(n,k)			# p - theoretical maximum of possible pairs (0,1)
+			p = min(n,k)							# p - theoretical maximum of possible pairs (0,1)
 
-			if n==k!=0:				# Checking for the easiest solutions when k=0, n=0 or n=k
+			if n==k!=0:								# Checking for the easiest solutions when k=0, n=0 or n=k
 				self.give_answer(1, [current_sequence])
 				self.time_results.append(0.0)
 			elif n==0 or k==0:
@@ -69,7 +69,7 @@ class binary_sequences:
 				self.time_results.append(round(end_time - start_time,3))
 				self.give_answer(len(substring), substring)
 
-		else:		# Writing of the conclusion with respect to conjugation of polish numerals
+		else:										# Writing of the conclusion with respect to conjugation of polish numerals
 
 			if self.input_file_exist and not self.reading_file_error:
 				last_digit=list(str(self.number_of_sequences)).pop()
@@ -268,17 +268,18 @@ class binary_sequences:
 
 
 def test(optimization_level = 3, path_in = '', path_out = '', return_time = True, worst_scenario = False,
-	lines = 10, start_repeats = 30, start_length = 50, increment = 0, multiplier = 1):
+	lines = 10, start_repeats = 30, start_length = 50, increment = 0, multiplier = 1, send_to_class = False,
+	receiver_object = ''):
 	''' Creates the test with the random or worst possible input data. 
 	Be careful with the input and output files you are giving: they will be 
 	replaced with the new automatically generated files. '''
 
-	from random import randrange as rand 												# Generation the file names
+	from random import randrange as rand 													# Generation the file names
 	rand_koef = rand(1000)
 	if path_in == '':
-		path_in = "input_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
+		path_in = ".\\tests\\input_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
 	if path_out == '':
-		path_out = "output_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
+		path_out = ".\\tests\\output_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
 
 	try:
 		if worst_scenario:																	# Generation an input file
@@ -295,8 +296,21 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 		test_object.solve_problem()
 		if return_time:
 			give_time(test_object)
-			assist.draw_graph(test_object.time_results)
+			if send_to_class:
+				receiver_object.save_new_data(test_object.time_results)
 		del test_object
+
+
+
+def algorithm_comparison():
+	graph_object = assist.Graph()
+	test(optimization_level = 2, send_to_class=True, receiver_object=graph_object, return_time = True, 
+		worst_scenario = True, lines = 50, start_repeats = 10,start_length = 50,increment = 10,multiplier = 1)
+	test(optimization_level = 3, send_to_class=True, receiver_object=graph_object, return_time = True, 
+		worst_scenario = True, lines = 50, start_repeats = 10,start_length = 50,increment = 10,multiplier = 1)
+	test(optimization_level = 1, send_to_class=True, receiver_object=graph_object, return_time = True, 
+		worst_scenario = True, lines = 20, start_repeats = 10,start_length = 50,increment = 10,multiplier = 1)
+	graph_object.paint_graph()
 
 
 
@@ -344,9 +358,13 @@ def main():
 	print(example_object.time_results)								# Only prints the array of time records
 	give_time(example_object)										# Do the same and also adds some pretty text
 
+	# If you finished working with some object 
+	# it is better to delete it then not, beause
+	# in that case it won't eat any RAM
+	del example_object
 
 	test(															# You can also create tests using test() function, where:
-		optimization_level = 2, 									# - level of algorithm optimisation, accepted values: 1, 2, 3;
+		optimization_level = 3, 									# - level of algorithm optimisation, accepted values: 1, 2, 3;
 		path_in = '.\\tests\\input_worst_scenario.txt', 			# - path, where new input file will be generated;
 		path_out = '.\\tests\\output_worst_scenario.txt', 			# - path, where new output file will be created;
 		return_time = True, 										# - flag, which asks if you would like to see used time results in console;
@@ -356,6 +374,8 @@ def main():
 		start_length = 50, 											# - length of the first string (line), if random scenario is chosen;
 		increment = 10, 											# - increment of (repeats / length) of the (sequence '101' / line) after each line;
 		multiplier = 1)												# - multiplication of (repeats / length) of the (sequence '101' / line) after each line.
+
+	algorithm_comparison()
 
 	# import os
 	# os.system("pause")
