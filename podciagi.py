@@ -439,8 +439,10 @@ def main():
 	[1, 0, 1, 1, 1, 0, 1, 0, 1, 0], [1, 1, 1, 1, 0, 1, 0, 1, 0, 1]
 	'''
 
-	example_object = binary_sequences('input.txt', 'output.txt')	# Input the object of the class binary_sequences with two
+																	# Input the object of the class binary_sequences with two
 																	# parameters: the path to the input & output files
+	example_object = binary_sequences('.\\tests\\input.txt', '.\\tests\\output.txt')	
+	
 
 	# Default values of the flags:
 	example_object.enable_repeating_lists_before_output = False		# Enable to add the repetition of the input data in the output file	
