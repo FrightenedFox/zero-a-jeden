@@ -8,12 +8,11 @@ of the Polytechnic University of Rzeszów, Poland.
   
 ## The task that was needed to be solved  
   
-*For a string (in the form of an array) containing only the values 0 or 1, find a substring that contains an equal number of ones and zeros whose length is the greatest.*  
-[original task][1]  
+*For a string (in the form of an array) containing only the values 0 or 1, find a substring that contains an equal number of ones and zeros whose length is the greatest.* [*original task*][1]  
   
 ## Navigation through files and folders  
   
-A detailed explanation of my thoughts and decisions made to optimize the algorithm can be found in file "Sprawozdanie.docx".  
+A detailed explanation of my thoughts and decisions made to optimize the algorithm can be found in file `"Sprawozdanie.docx"`.  
 
 The main file of the program is named `"podciagi.py"`.  
 There is also exists an assistant program in the file `"assistant_module.py"`, where some necessary functions are held.  
@@ -26,8 +25,8 @@ In the file `"Block diagram.drawio"` you can find the block diagrams of the foll
  * `main_algorithm_optimized()`
  * `check_if_exists()`
   
-The folder tests is used to keep input and output files.  
-In the folder Pictures are saved all pictures used in the project.  
+The folder `tests` is used to keep input and output files.  
+In the folder `Pictures` are saved all pictures used in the project.  
   
 ## Conclusions  
   
