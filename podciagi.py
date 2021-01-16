@@ -312,10 +312,10 @@ def porownanie_algorytmow():
 	# The following function is commented, because we already created this file before, 
 	# so we don't need to create it one more time. Moreover, since the input data is the same, 
 	# you can test this yourself and get similar results to one, shown in the report.
-	# assist.random_sequence(path = ".\\tests\\report_rand_input.txt", lines = 20, start_length = 1000, increment = 0, multiplier = 1)
+	# assist.random_sequence(path = "./tests/report_rand_input.txt", lines = 20, start_length = 1000, increment = 0, multiplier = 1)
 
 	# Creating an object of class binary_sequences
-	test_1 = binary_sequences('.\\tests\\report_rand_input.txt', '.\\tests\\report_rand_output.txt')
+	test_1 = binary_sequences('./tests/report_rand_input.txt', './tests/report_rand_output.txt')
 
 	# Needed values have to be assigned to flags
 	test_1.optimization_level = 1
@@ -333,22 +333,22 @@ def porownanie_algorytmow():
 	give_time(test_1)
 	
 	# Third algorithm test
-	test(optimization_level = 3, path_in = '.\\tests\\report_rand_input.txt', path_out = '.\\tests\\report_rand_output.txt', 
+	test(optimization_level = 3, path_in = './tests/report_rand_input.txt', path_out = './tests/report_rand_output.txt', 
 		return_time = True, generate_new_data = False, show_progress_bar = True)
 	
 	# Creating a comparison of three algorithms using graph
 	# Maybe we would like to comment all upper rows, since this function creates tests itself.
-	algorithm_comparison(".\\tests\\report_rand_input.txt", ".\\tests\\report_rand_output.txt",generate_new_data = False, 
+	algorithm_comparison("./tests/report_rand_input.txt", "./tests/report_rand_output.txt",generate_new_data = False, 
 		show_progress_bar = True, width=1200, height=800, show_stats = False)
 	
-	assist.worst_sequence(path = ".\\tests\\report_worst_input.txt", lines = 20, start_repeats = 333, increment = 0, multiplier = 1)
+	assist.worst_sequence(path = "./tests/report_worst_input.txt", lines = 20, start_repeats = 333, increment = 0, multiplier = 1)
 
-	algorithm_comparison(".\\tests\\report_worst_input.txt", ".\\tests\\report_worst_output.txt",generate_new_data = False, 
+	algorithm_comparison("./tests/report_worst_input.txt", "./tests/report_worst_output.txt",generate_new_data = False, 
 		show_progress_bar = True, width=1200, height=800, show_stats = False)
 	
-	assist.worst_sequence(path = ".\\tests\\report_worst_increment_input.txt", lines = 20, start_repeats = 100, increment = 15, multiplier = 1)
+	assist.worst_sequence(path = "./tests/report_worst_increment_input.txt", lines = 20, start_repeats = 100, increment = 15, multiplier = 1)
 	
-	algorithm_comparison(".\\tests\\report_worst_increment_input.txt", ".\\tests\\report_worst_increment_output.txt",generate_new_data = False, 
+	algorithm_comparison("./tests/report_worst_increment_input.txt", "./tests/report_worst_increment_output.txt",generate_new_data = False, 
 		show_progress_bar = True, width=1200, height=800, show_stats = False)
 	"""
 	pass
@@ -365,9 +365,9 @@ def test(optimization_level = 3, path_in = '', path_out = '', return_time = True
 	from random import randrange as rand 													# Generation of the file names
 	rand_koef = rand(1000)
 	if path_in == '':
-		path_in = ".\\tests\\input_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
+		path_in = "./tests/input_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
 	if path_out == '':
-		path_out = ".\\tests\\output_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
+		path_out = "./tests/output_opt_{0}_rand{1}.txt".format(optimization_level, rand_koef)
 
 	try:
 		if worst_scenario and generate_new_data:											# Generation of an input file
@@ -441,7 +441,7 @@ def main():
 
 																	# Input the object of the class binary_sequences with two
 																	# parameters: the path to the input & output files
-	example_object = binary_sequences('.\\tests\\input.txt', '.\\tests\\output.txt')	
+	example_object = binary_sequences('./tests/input.txt', './tests/output.txt')	
 	
 
 	# Default values of the flags:
@@ -471,8 +471,8 @@ def main():
 
 	test(															# You can also create tests using test() function, where:
 		optimization_level = 1, 									# - level of algorithm optimisation, accepted values: 1, 2, 3;
-		path_in = '.\\tests\\input_worst_scenario.txt', 			# - path, where new input file will be generated or existing file opened;
-		path_out = '.\\tests\\output_worst_scenario.txt', 			# - path, where new output file will be created;
+		path_in = './tests/input_worst_scenario.txt', 			# - path, where new input file will be generated or existing file opened;
+		path_out = './tests/output_worst_scenario.txt', 			# - path, where new output file will be created;
 		return_time = True, 										# - flag, which asks if you would like to see used time results in console;
 		generate_new_data = True,									# - flag, which asks if you would like to create a new input file or use an existing one;
 		show_progress_bar = True, 									# - flag, which asks if you would like to see the progress bar (WORKS WELL ONLY IN CONSOLE);
@@ -489,8 +489,8 @@ def main():
 
 	
 	algorithm_comparison(											# You can also create algorithm comparison using algorithm_comparison() function, where:
-		path_in = '.\\tests\\inp_comparison.txt', 					# - path, where new input file will be generated;
-		path_out = '.\\tests\\out_comparison.txt', 					# - path, where new output file will be created;
+		path_in = './tests/inp_comparison.txt', 					# - path, where new input file will be generated;
+		path_out = './tests/out_comparison.txt', 					# - path, where new output file will be created;
 		generate_new_data = True,									# - flag, which asks if you would like to create a new input file or use an existing one;
 		show_progress_bar = True, 									# - flag, which asks if you would like to see the progress bar (WORKS WELL ONLY IN CONSOLE);
 		height = 800,												# - height of the created graph (minimum 200, recommended 800);
