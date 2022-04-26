@@ -3,8 +3,7 @@
 
 ***
 
-This project is a part of the curriculum in "Algorytmy i Struktury danych"
-of the Polytechnic University of Rzeszów, Poland.  
+This project is a part of the curriculum in *"Algorithms and Data Structures"* of the Rzeszow University of Technology, Poland.  
   
 ## The task that was needed to be solved  
   
